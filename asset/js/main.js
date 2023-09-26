@@ -38,12 +38,74 @@ const blurHeader = () => {
 window.addEventListener("scroll", blurHeader);
 
 /*=============== EMAIL JS ===============*/
+const contactForm = document.getElementById("contact-form"),
+conatctMessage = document.getElementById("contact-message");
 
+const sendEmail = (e) => {
+    e.preventDefault();
+
+    // serviceID - templateID - #form - publicKey
+    emailjs.sendForm("service_72eetyl", "template_t140g7i", "#contact-form", "iKokWHH_gxfr_Z_RJ")
+        .then(() => {
+            //Show sent message
+            conatctMessage.textContent = "Email sent successfully";
+
+            // Remove sent message after 5 seconds
+            setTimeout(() => {
+                conatctMessage.textContent = "";
+            }, 5000);
+
+            // Clear input fields
+            contactForm.reset();
+        }, () => {
+            //Show error message
+            conatctMessage.textContent = "Error sending email";
+        })
+}
+
+contactForm.addEventListener("submit", sendEmail);
 
 /*=============== SHOW SCROLL UP ===============*/ 
+const scrollUp = () => {
+    const scrollUp = document.getElementById("scroll-up");
+    // When the scroll is greater than 350 viewport height, add the show-scroll class to the tag with the scrollup class
+    this.scrollY >= 350? scrollUp.classList.add("show-scroll") : scrollUp.classList.remove("show-scroll");
+}
 
+window.addEventListener("scroll", scrollUp);
 
 /*=============== SCROLL SECTIONS ACTIVE LINK ===============*/
+const sections = document.querySelectorAll('section[id]')
+    
+const scrollActive = () =>{
+  	const scrollDown = window.scrollY
 
+	sections.forEach(current =>{
+		const sectionHeight = current.offsetHeight,
+			  sectionTop = current.offsetTop - 58,
+			  sectionId = current.getAttribute('id'),
+			  sectionsClass = document.querySelector('.nav__menu a[href*=' + sectionId + ']')
+
+		if(scrollDown > sectionTop && scrollDown <= sectionTop + sectionHeight){
+			sectionsClass.classList.add('active-link')
+		}else{
+			sectionsClass.classList.remove('active-link')
+		}                                                    
+	})
+}
+window.addEventListener('scroll', scrollActive)
 
 /*=============== SCROLL REVEAL ANIMATION ===============*/
+const sr = ScrollReveal({
+    origin: 'top',
+    distance: '60px',
+    duration: 2500,
+    delay: 400,
+    // reset: true // Animation repeat
+})
+
+sr.reveal('.home__data, .home__social, .contact__container, .footer__container, .qualification__data');
+sr.reveal('.home__image, .qualification__container', {origin: 'bottom'})
+sr.reveal('.about__data, .skills__data', {origin: 'left'})
+sr.reveal('.about__image, .skills__content', {origin: 'right'})
+sr.reveal('.projects__card', {interval: 100})
